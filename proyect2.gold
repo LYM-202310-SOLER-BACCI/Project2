@@ -1,0 +1,61 @@
+// Proyecto 2 
+
+// Gabriela Soler - 202123744
+// Luciana Bacci - 202121870
+
+using gold.**
+
+
+procedure main(args:String[]) begin 
+   coder:=FunctCoder()
+   GAutomataFrame.show(coder)
+  Utilities.testCodeDecode(coder)
+		
+end
+
+function FunctCoder() begin
+	Q:= {"initial","read","reverse","end","error"}
+	Σ:= {"a", "b", "c", "&"}
+	Out :=	{"a", "b", "c", "&","*"}
+	q₀:="read"
+	F:= {"end"}
+	return 	GDeterministicTransducer(Q,Σ,Out,q₀,F,δ,g,h)
+end
+
+function δ(q,σ) begin
+	if q = "initial" then 
+		if σ = "a" or σ="b" or σ= "c" then return {"read",σ}
+			end
+	elseif q = "read" then 
+		if σ = "&" then return {"end","&"}
+		elseif σ = "a" or σ = "b" or σ = "c" then return {"read", σ}
+			end
+	elseif q = "reverse" then
+		if σ = "&" then return {"end","&"}
+		elseif σ = "a" or σ = "b" or σ = "c" then return {"reverse",σ}
+		end 
+	else return {"error",σ}
+	end 
+end
+
+function g(q) begin
+	if q = "end" then return "&"
+	else return ""
+	end
+end 
+
+function h(q,σ) begin
+	if q = "initial" then 
+		if σ ="a" or σ = "b" or σ="c" then return "read"
+		end 
+	elseif q ="read" then
+		if σ ="&" then return "reverse"
+		elseif σ ="a" or σ = "b" or σ="c" then return "read"
+		end 
+	elseif q ="reverse" then
+		if σ ="&" then return "end"
+		elseif σ ="a" or σ = "b" or σ="c" then return "reverse"
+		end
+	end
+end 
+
